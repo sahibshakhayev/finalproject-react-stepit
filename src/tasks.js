@@ -34,8 +34,10 @@ export async function updateTask(id, updates) {
   let tasks = await localforage.getItem("tasks");
   let task = tasks.find(task => task.id === id);
   if (!task) throw new Error("No task found for", id);
+
   Object.assign(task, updates);
   await set(tasks);
+  console.log(task);
   return task;
 }
 
@@ -50,16 +52,7 @@ export async function deleteTask(id) {
   return false;
 }
 
-export async function DoneTask(id) {
-  let tasks = await localforage.getItem("tasks");
-  let index = tasks.findIndex(task => task.id === id);
-  if (index > -1) {
-    tasks(index).done ? tasks(index).done = false : tasks(index).done =  true;
-    await set(tasks);
-    return true;
-  }
-  return false;
-}
+
 
 
 

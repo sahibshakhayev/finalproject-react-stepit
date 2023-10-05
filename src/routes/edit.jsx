@@ -1,5 +1,6 @@
 import { Form, useLoaderData, redirect, useNavigate} from "react-router-dom";
 import { updateTask } from "../tasks";
+import { useState } from "react";
 
 
 export async function action({ request, params }) {
@@ -9,7 +10,7 @@ export async function action({ request, params }) {
     return redirect(`/tasks/${params.taskId}`);
   }
 
-export default function EditContact() {
+export default function EditTask() {
   const { task } = useLoaderData();
   const navigate = useNavigate();
   return (
@@ -21,15 +22,24 @@ export default function EditContact() {
           aria-label="Task Name"
           type="text"
           name="name"
-          defaultValue={task.first}
+          defaultValue={task.name}
         />
       </p>
       <label>
-        <span>Notes</span>
+        <span>Description</span>
         <textarea
           name="description"
           defaultValue={task.description}
           rows={6}
+        />
+      </label>
+
+      <label>
+        <span>Done</span>
+        <input
+          name="done"
+         type="checkbox"
+          defaultChecked= {task.done}
         />
       </label>
       <p>

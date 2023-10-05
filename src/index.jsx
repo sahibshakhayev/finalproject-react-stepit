@@ -7,7 +7,6 @@ import EditTask, {
   action as editAction,
 } from "./routes/edit";
 import { action as destroyAction } from "./routes/destroy";
-import { action as DoneAction } from "./routes/done";
 import Home from "./routes/home";
 
 import {
@@ -41,12 +40,6 @@ const router = createBrowserRouter([
         action: destroyAction,
         errorElement: <div>Oops! There was an error.</div>,
       },
-      {
-        path: "tasks/:taskId/done",
-        action: DoneAction,
-        errorElement: <div>Oops! There was an error.</div>,
-      },
-
 
     ],
   },

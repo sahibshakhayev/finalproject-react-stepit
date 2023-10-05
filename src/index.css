@@ -285,7 +285,10 @@ i {
   text-decoration: underline;
 }
 
+.done {
+z-index: 200;
 
+}
 
 #task h1 ~ div {
   display: flex;

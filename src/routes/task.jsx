@@ -10,6 +10,9 @@ export async function loader({ params }) {
 export default function Task() {
   const { task } = useLoaderData();
 
+
+  
+
   return (
     <div id="task">
 
@@ -45,20 +48,5 @@ export default function Task() {
         </div> */}
       </div>
     </div>
-  );
-}
-
-export function Done({ task }) {
-  // yes, this is a `let` for later
-  let done = task.done;
-  return (
-    <Form method="put" action={`/tasks/${task.id}/done`}>
-      <input
-        name="done"
-        type="checkbox"
-        checked={done ? false : true}
-        onChange={(e) => e.target.parentElement.submit()}
-      />
-    </Form>
   );
 }

@@ -1,6 +1,8 @@
 import { Outlet, NavLink, useLoaderData,Form, redirect, useNavigation} from "react-router-dom";
 import { getTasks, createTask } from "../tasks";
-import {Done} from "../routes/task"
+import { useEffect, useState } from "react";
+import FilterButtons from '../filter'
+import { async } from "q";
 
 export async function action() {
   const task = await createTask();
@@ -12,9 +14,28 @@ export async function loader() {
   return { tasks};
 }
 
+
+
 export default function Root() {
     const { tasks } = useLoaderData();
     const navigation = useNavigation();
+    const [filter, setFilter] = useState("all");
+    const[taskList, setTasks] = useState(tasks);
+
+    const  filterTasks = () => {
+      
+      switch (filter) {
+        case "done":
+          return  taskList.filter((task) => task.done);
+        case "undone":
+          return taskList.filter((task) => !task.done);
+        default:
+          return taskList;
+      }
+
+    };
+
+
     return (
       <>
         <div id="sidebar">
@@ -23,12 +44,30 @@ export default function Root() {
             <Form method="post">
               <button type="submit">New Task</button>
             </Form>
+            <FilterButtons setTasks={setTasks} filter={filter} setFilter={setFilter}/>
           </div>
           <nav>
-          {tasks.length ? (
+          {filterTasks().length ? (
             <ul>
-              {tasks.map((task) => (
+              {filterTasks().map((task) => (
                 <li key={task.id}>
+                <input type="checkbox" checked={task.done == 'on' ? 'on' : 'off'}></input>
+                <div>
+          <Form action={'tasks/'+task.id + '/edit'}>
+            <button type="submit">Edit</button>
+          </Form>
+          <Form
+            method="post"
+            action={'tasks/'+task.id + '/destroy'}
+            onSubmit={(event) => {
+              if (!window.confirm("Please confirm you want to delete this record.")) {
+                event.preventDefault();
+              }
+            }}
+          >
+            <button type="submit">Delete</button>
+          </Form>
+        </div>
                 <NavLink
                     to={`tasks/${task.id}`}
                     className={({ isActive, isPending }) =>
@@ -39,7 +78,7 @@ export default function Root() {
                         : ""
                     }
                   >
-                    {<Done task={task}/>}
+                 
                     {task.name ? (
                       <>
                         {task.name}
@@ -47,8 +86,8 @@ export default function Root() {
                     ) : (
                       <i>No Name</i>
                     )}{" "}
-                    {task.done && <input type="checkbox" checked="false"/>}
                   </NavLink>
+                  
                 </li>
               ))}
             </ul>
